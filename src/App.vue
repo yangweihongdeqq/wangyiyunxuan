@@ -1,28 +1,37 @@
 <template>
-  <div id="app">
-    <route-link to="/msite"></route-link>
-    <route-link to="/classify"></route-link>
-    <route-link to="/goods"></route-link>
-    <route-link to="/shoppingcart"></route-link>
-    <route-link to="/person"></route-link>
-    <router-view></router-view>
-    <FooterGuide></FooterGuide>
-
+  <div class="wrap">
+    <router-view/>
+    <footerBottom v-show="$route.meta.isShowFoot"/>
   </div>
 </template>
-
 <script>
-import FooterGuide from './components/FooterGuide/FooterGuide.vue'
-export default {
-  components: {
-    FooterGuide
+  import {shopList,seacher} from './api/index'
+ import footerBottom from "./components/footer/footer";
 
-  }
+export default {
+ 
+ components: {
+      footerBottom
+    },
+   async mounted(){
+   //发送请求 获取shoplist数据
+        const reuslt = await shopList()
+        //更新vuex中的数据
+        // console.log(this.$store)
+        if(reuslt.code===0){
+
+          this.$store.dispatch('shopList',reuslt.data)
+          console.log(reuslt,'111111111')
+          console.log(shopList)
+        }
+    }
 }
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
-  #app
-    width 100%
-    height 100%
+<style lang="stylus" rel="stylesheet/stylus" >
+.wrap
+  height 100%
+  width 100%
+  position relative
 </style>
+
